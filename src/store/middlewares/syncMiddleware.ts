@@ -1,4 +1,5 @@
 import { Middleware } from '@reduxjs/toolkit';
+import { dispatchActionToBackground } from '../../utils/dispatchActionToBackground';
 
 const syncMiddleware: Middleware = (storeAPI) => (next) => async (action) => {
   if (action.type === 'INIT_SYNC_STORE') {
@@ -8,10 +9,9 @@ const syncMiddleware: Middleware = (storeAPI) => (next) => async (action) => {
       }
     });
   }
+
   const result = next(action);
-
-  chrome.runtime.sendMessage({ type: 'DISPATCH_ACTION', action });
-
+  await dispatchActionToBackground(action);
   return result;
 };
 

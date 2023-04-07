@@ -3,7 +3,7 @@
   "name": "cryptography-chrome-extension",
   "version": "1.0.0",
   "action": { "default_popup": "index.html" },
-  "permissions": ["storage"],
+  "permissions": ["storage", "tabs"],
   "background": {
     "service_worker": "src/background.ts",
     "type": "module"
