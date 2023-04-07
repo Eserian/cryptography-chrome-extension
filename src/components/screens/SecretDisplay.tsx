@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CryptoService from '../utils/cryptoService';
+import CryptoService from '../../utils/cryptoService';
 
 interface SecretProps {
   secret: string | null;

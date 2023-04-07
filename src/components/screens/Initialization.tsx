@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CryptoService from '../utils/cryptoService';
+import CryptoService from '../../utils/cryptoService';
 import EnterPassword from './EnterPassword';
 
 interface InitializationProps {

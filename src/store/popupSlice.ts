@@ -37,6 +37,14 @@ const popupSlice = createSlice({
       state.passwordHash = null;
     },
   },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      (action): action is PayloadAction<PopupState> => action.type === 'UPDATE_POPUP_STORE',
+      (state, action) => {
+        return action.payload;
+      }
+    );
+  },
 });
 
 export const { setInitialized, setLoggedIn, setSecret, setPasswordHash, resetApp } = popupSlice.actions;
