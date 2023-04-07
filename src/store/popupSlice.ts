@@ -3,14 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface PopupState {
   isInitialized: boolean;
   isLoggedIn: boolean;
-  secret: string | null;
+  encryptedSecret: string | null;
   passwordHash: string | null;
 }
 
 const initialState: PopupState = {
   isInitialized: false,
   isLoggedIn: false,
-  secret: null,
+  encryptedSecret: null,
   passwordHash: null,
 };
 
@@ -24,8 +24,8 @@ const popupSlice = createSlice({
     setLoggedIn: (state, action: PayloadAction<boolean>) => {
       state.isLoggedIn = action.payload;
     },
-    setSecret: (state, action: PayloadAction<string | null>) => {
-      state.secret = action.payload;
+    setEncryptedSecret: (state, action: PayloadAction<string | null>) => {
+      state.encryptedSecret = action.payload;
     },
     setPasswordHash: (state, action: PayloadAction<string | null>) => {
       state.passwordHash = action.payload;
@@ -33,7 +33,7 @@ const popupSlice = createSlice({
     resetApp: (state) => {
       state.isInitialized = false;
       state.isLoggedIn = false;
-      state.secret = null;
+      state.encryptedSecret = null;
       state.passwordHash = null;
     },
   },
@@ -47,6 +47,6 @@ const popupSlice = createSlice({
   },
 });
 
-export const { setInitialized, setLoggedIn, setSecret, setPasswordHash, resetApp } = popupSlice.actions;
+export const { setInitialized, setLoggedIn, setEncryptedSecret, setPasswordHash, resetApp } = popupSlice.actions;
 
 export default popupSlice.reducer;

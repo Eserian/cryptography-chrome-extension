@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
-import { setInitialized, setLoggedIn, setSecret, setPasswordHash, resetApp } from '../store/popupSlice';
+import { setInitialized, setLoggedIn, setEncryptedSecret, setPasswordHash, resetApp } from '../store/popupSlice';
 import SignIn from './screens/SignIn';
 import Initialization from './screens/Initialization';
 import Secret from './screens/SecretDisplay';
@@ -11,18 +11,14 @@ const Popup: React.FC = () => {
   const dispatch = useDispatch();
   const isInitialized = useSelector((state: RootState) => state.popup.isInitialized);
   const isLoggedIn = useSelector((state: RootState) => state.popup.isLoggedIn);
-  const secret = useSelector((state: RootState) => state.popup.secret);
+  const encryptedSecret = useSelector((state: RootState) => state.popup.encryptedSecret);
   const passwordHash = useSelector((state: RootState) => state.popup.passwordHash);
-
-  useEffect(() => {
-    dispatch({ type: 'INIT_SYNC_STORE' });
-  }, [dispatch]);
 
   if (!isInitialized) {
     return (
       <Initialization
         onInitialize={(newSecret, passwordHash) => {
-          dispatch(setSecret(newSecret));
+          dispatch(setEncryptedSecret(newSecret));
           dispatch(setPasswordHash(passwordHash));
           dispatch(setInitialized(true));
         }}
@@ -43,13 +39,16 @@ const Popup: React.FC = () => {
             throw new Error('Invalid password')
           }
         }}
+        onReset={() => {
+          dispatch(resetApp());
+        }}
       />
     );
   }
 
   return (
     <Secret
-      secret={secret}
+      encryptedSecret={encryptedSecret}
       passwordHash={passwordHash}
       onLogout={() => {
         dispatch(setLoggedIn(false));
@@ -58,11 +57,8 @@ const Popup: React.FC = () => {
         if (passwordHash) {
           const newSecret = CryptoService.generateSecret();
           const newEncryptedSecret = await CryptoService.encryptSecret(newSecret, passwordHash);
-          dispatch(setSecret(newEncryptedSecret));
+          dispatch(setEncryptedSecret(newEncryptedSecret));
         }
-      }}
-      onReset={() => {
-        dispatch(resetApp());
       }}
     />
   );

@@ -2,25 +2,24 @@ import React, { useEffect, useState } from 'react';
 import CryptoService from '../../utils/cryptoService';
 
 interface SecretProps {
-  secret: string | null;
+  encryptedSecret: string | null;
   passwordHash: string | null;
   onLogout: () => void;
   onRegenerate: () => void;
-  onReset: () => void;
 }
 
-const Secret: React.FC<SecretProps> = ({ secret, passwordHash, onLogout, onRegenerate, onReset }) => {
+const Secret: React.FC<SecretProps> = ({ encryptedSecret, passwordHash, onLogout, onRegenerate }) => {
   const [decryptedSecret, setDecryptedSecret] = useState<string | null>(null);
 
   useEffect(() => {
     const decryptSecret = async () => {
-      if (secret && passwordHash) {
-        const newDecreptedSecret = await CryptoService.decryptSecret(secret, passwordHash);
+      if (encryptedSecret && passwordHash) {
+        const newDecreptedSecret = await CryptoService.decryptSecret(encryptedSecret, passwordHash);
         setDecryptedSecret(newDecreptedSecret);
       }
     }
     decryptSecret();
-  }, [secret]);
+  }, [encryptedSecret]);
 
   return (
     <div>
@@ -28,7 +27,6 @@ const Secret: React.FC<SecretProps> = ({ secret, passwordHash, onLogout, onRegen
       <p>Your secret: {decryptedSecret ? decryptedSecret : 'Decrypting...'}</p>
       <button onClick={onLogout}>Logout</button>
       <button onClick={onRegenerate}>Regenerate Secret</button>
-      <button onClick={onReset}>Reset App</button>
     </div>
   );
 };

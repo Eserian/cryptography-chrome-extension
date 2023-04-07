@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 interface SignInProps {
   onLogin: (password: string) => void;
+  onReset: () => void;
 }
 
-const SignIn: React.FC<SignInProps> = ({ onLogin }) => {
+const SignIn: React.FC<SignInProps> = ({ onLogin, onReset }) => {
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
@@ -26,6 +27,7 @@ const SignIn: React.FC<SignInProps> = ({ onLogin }) => {
       />
       {error && <p>{error}</p>}
       <button onClick={handleLogin}>Sign In</button>
+      <button onClick={onReset}>Reset App</button>
     </div>
   );
 };
