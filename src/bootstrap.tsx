@@ -1,14 +1,19 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { loadFromChromeStorage } from './utils/stateStorageHelper';
 
-const Bootstrap = () => {
+const Bootstrap: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch({ type: 'INIT_SYNC_STORE' });
+    (async () => {
+      const loadedState = await loadFromChromeStorage();
+  
+      dispatch({ type: 'INIT_SYNC_STORE', payload: loadedState });
+    })()
   }, []);
 
   return null;
-}
+};
 
 export default Bootstrap;

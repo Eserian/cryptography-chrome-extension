@@ -1,25 +1,22 @@
-import store from '../store';
+import { RootState } from "../store";
 
-export const saveStateToStorage = async () => {
-  const { isInitialized, passwordHash, encryptedSecret, isLoggedIn } = store.getState().popup;
-  await chrome.storage.local.set({
-    isInitialized,
-    passwordHash,
-    encryptedSecret,
-    isLoggedIn
-  });
+export const saveToChromeStorage = async (state: RootState) => {
+  try {
+    await chrome.storage.sync.set({ state });
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-export const loadStateFromStorage = async () => {
-  return new Promise<{ isInitialized: boolean; passwordHash: string, encryptedSecret: string, isLoggedIn: boolean } | null>((resolve) => {
-    chrome.storage.local.get(['isInitialized', 'passwordHash', 'encryptedSecret'], (result) => {
-      resolve({
-        isInitialized: result.isInitialized ?? false,
-        passwordHash: result.passwordHash ?? null,
-        encryptedSecret: result.encryptedSecret ?? null,
-        isLoggedIn: result.isLoggedIn ?? false,
-      });
-      chrome.storage.local.clear();
+export const loadFromChromeStorage = (): Promise<RootState | undefined> => {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get('state', (result) => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+        resolve(undefined);
+      } else {
+        resolve(result.state);
+      }
     });
   });
 };
