@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "cryptography-chrome-extension",
+  "version": "1.0.0",
+  "action": { "default_popup": "index.html" },
+  "permissions": ["storage", "tabs"],
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'"
+  }
+}
